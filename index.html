@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TONIE_TECH — Innovate. Build. Inspire.</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060911;
+    --bg-panel:#0E1424;
+    --bg-panel-2:#101830;
+    --cyan:#3ED9F5;
+    --blue:#4C7FFF;
+    --purple:#8B5CF6;
+    --text:#EAF1FF;
+    --muted:#8B96B8;
+    --line:rgba(255,255,255,0.08);
+    --grad: linear-gradient(120deg, var(--cyan), var(--blue) 55%, var(--purple));
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  a{color:inherit;text-decoration:none;}
+
+  :focus-visible{
+    outline:2px solid var(--cyan);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  .mono{font-family:'IBM Plex Mono', monospace;}
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    display:inline-flex;
+    align-items:center;
+    gap:0.5em;
+    margin-bottom:1rem;
+  }
+  .eyebrow::before{
+    content:"";
+    width:6px;height:6px;border-radius:50%;
+    background:var(--grad);
+    box-shadow:0 0 8px var(--cyan);
+  }
+
+  h1,h2,h3{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+    position:relative;
+  }
+
+  /* ---------- Circuit rail (signature element) ---------- */
+  .rail{
+    position:absolute;
+    left:10px;
+    top:0;
+    bottom:0;
+    width:2px;
+    background:linear-gradient(to bottom, transparent, var(--cyan) 4%, var(--purple) 92%, transparent);
+    opacity:0.5;
+    display:none;
+  }
+  .rail-dot{
+    position:absolute;
+    left:6px;
+    width:10px;height:10px;
+    border-radius:50%;
+    background:var(--cyan);
+    box-shadow:0 0 12px 3px var(--cyan);
+    animation:travel 9s linear infinite;
+  }
+  @keyframes travel{
+    0%{top:0%; background:var(--cyan); box-shadow:0 0 12px 3px var(--cyan);}
+    50%{background:var(--blue); box-shadow:0 0 12px 3px var(--blue);}
+    100%{top:100%; background:var(--purple); box-shadow:0 0 12px 3px var(--purple);}
+  }
+  .node{
+    position:absolute;
+    left:2px;
+    width:18px;height:18px;
+    border:2px solid var(--line);
+    border-radius:50%;
+    background:var(--bg);
+    transition:border-color 0.4s, box-shadow 0.4s;
+  }
+  .node.active{
+    border-color:var(--cyan);
+    box-shadow:0 0 14px var(--cyan);
+  }
+  @media(min-width:1000px){
+    .rail{display:block;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .rail-dot{animation:none; top:50%;}
+  }
+
+  /* ---------- Nav ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(6,9,17,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 32px;
+    max-width:1180px;
+    margin:0 auto;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1.1rem;
+    letter-spacing:0.02em;
+  }
+  .brand img{height:32px;width:auto;}
+  .nav-links{
+    display:flex;
+    gap:32px;
+    font-size:0.92rem;
+    color:var(--muted);
+  }
+  .nav-links a:hover{color:var(--cyan);}
+  .nav-cta{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 18px;
+    border-radius:999px;
+    background:var(--grad);
+    color:#04060B;
+    font-weight:600;
+    font-size:0.88rem;
+    white-space:nowrap;
+  }
+  .menu-toggle{display:none;}
+  @media(max-width:800px){
+    .nav-links{display:none;}
+  }
+
+  /* ---------- Sections shared ---------- */
+  section{
+    padding:110px 0 90px;
+    position:relative;
+  }
+  .section-head{
+    max-width:640px;
+    margin-bottom:56px;
+  }
+  .section-head h2{
+    font-size:clamp(1.8rem, 3vw, 2.4rem);
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding-top:90px;
+    padding-bottom:100px;
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:56px;
+    align-items:center;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 5vw, 4rem);
+    line-height:1.08;
+    margin-bottom:22px;
+  }
+  .hero h1 span{
+    background:var(--grad);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p.lead{
+    color:var(--muted);
+    font-size:1.08rem;
+    max-width:480px;
+    margin-bottom:34px;
+  }
+  .btn-row{display:flex;gap:16px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 26px;
+    border-radius:10px;
+    font-weight:600;
+    font-size:0.95rem;
+    transition:transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary{
+    background:var(--grad);
+    color:#04060B;
+    box-shadow:0 8px 24px -6px rgba(76,127,255,0.5);
+  }
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 12px 28px -6px rgba(76,127,255,0.65);}
+  .btn-ghost{
+    border:1px solid var(--line);
+    color:var(--text);
+  }
+  .btn-ghost:hover{border-color:var(--cyan); color:var(--cyan);}
+
+  /* terminal card */
+ 
+  .hero-visual{
+  position:relative;
+}
+.hero-photo-frame{
+  position:relative;
+  border-radius:50%;
+  padding:4px;
+  background:var(--grad);
+  width:min(340px, 80%);
+  margin:0 auto;
+}
+.hero-photo-frame img{
+  display:block;
+  width:100%;
+  border-radius:50%;
+  aspect-ratio:1/1;
+  object-fit:cover;
+  object-position:center top;
+  background:var(--bg-panel);
+}
+.terminal{
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);
+}
+.hero-visual .terminal{
+  position:absolute;
+  left:-36px;
+  bottom:-36px;
+  width:78%;
+  z-index:5;
+}
+  @media(max-width:900px){
+    .hero-visual .terminal{
+      position:static;
+      width:100%;
+      margin-top:20px;
+      left:0; bottom:0;
+    }
+  }
+  .terminal-bar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:12px 16px;
+    background:var(--bg-panel-2);
+    border-bottom:1px solid var(--line);
+  }
+  .terminal-bar span{
+    width:10px;height:10px;border-radius:50%;
+    background:#3a3f52;
+  }
+  .terminal-bar span:nth-child(1){background:#ff5f57;}
+  .terminal-bar span:nth-child(2){background:#febc2e;}
+  .terminal-bar span:nth-child(3){background:#28c840;}
+  .terminal-label{
+    margin-left:8px;
+    font-size:0.75rem;
+    color:var(--muted);
+  }
+  .terminal-body{
+    padding:22px 20px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.86rem;
+    color:#B9C4E0;
+    min-height:220px;
+  }
+  .terminal-body .k{color:var(--purple);}
+  .terminal-body .s{color:var(--cyan);}
+  .terminal-body .c{color:#5b6584;}
+  .cursor{
+    display:inline-block;
+    width:7px;height:1em;
+    background:var(--cyan);
+    vertical-align:middle;
+    animation:blink 1s step-end infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  /* ---------- About ---------- */
+  .about{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:60px;
+    align-items:start;
+  }
+  .about p{color:var(--muted); margin-bottom:16px; max-width:520px;}
+  .about p strong{color:var(--text);}
+  .log{
+    background:var(--bg-panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:26px 26px;
+  }
+  .log-line{
+    display:flex;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+    font-size:0.92rem;
+  }
+  .log-line:last-child{border-bottom:none;}
+  .log-line .arrow{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--cyan);
+  }
+  .log-line .muted{color:var(--muted);}
+
+  /* ---------- Services ---------- */
+  .service-card{
+    background:linear-gradient(160deg, var(--bg-panel), var(--bg-panel-2));
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:48px;
+    display:grid;
+    grid-template-columns:auto 1fr auto;
+    gap:40px;
+    align-items:center;
+  }
+  .service-icon{
+    width:64px;height:64px;
+    border-radius:16px;
+    background:var(--grad);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .service-icon svg{width:32px;height:32px;}
+  .service-text h3{font-size:1.5rem; margin-bottom:10px;}
+  .service-text p{color:var(--muted); margin-bottom:18px; max-width:460px;}
+  .checklist{
+    list-style:none;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    font-size:0.92rem;
+    color:var(--text);
+  }
+  .checklist li{display:flex;align-items:center;gap:10px;}
+  .checklist li::before{
+    content:"";
+    width:8px;height:8px;
+    border-radius:2px;
+    background:var(--grad);
+    flex-shrink:0;
+  }
+  .service-cta{align-self:center;}
+  @media(max-width:860px){
+    .service-card{grid-template-columns:1fr; text-align:left;}
+    .service-cta{justify-self:start;}
+  }
+
+  /* ---------- Work ---------- */
+  .work-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:24px;
+  }
+  .work-card{
+    border:1px solid var(--line);
+    border-radius:16px;
+    overflow:hidden;
+    background:var(--bg-panel);
+    transition:border-color 0.3s, transform 0.3s;
+  }
+  .work-card:hover{border-color:var(--cyan); transform:translateY(-4px);}
+  .work-card.placeholder{
+    border:1.5px dashed var(--line);
+    padding:36px 24px;
+    min-height:220px;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+  }
+  .work-thumb{
+    width:100%;
+    aspect-ratio:16/9;
+    overflow:hidden;
+    background:var(--bg-panel-2);
+  }
+  .work-thumb img{
+    width:100%;height:100%;
+    object-fit:cover;
+    display:block;
+    transition:transform 0.4s;
+  }
+  .work-card:hover .work-thumb img{transform:scale(1.05);}
+  .work-info{padding:22px 22px 26px;}
+  .work-info h4{
+    font-family:'Space Grotesk', sans-serif;
+    font-size:1.05rem;
+    margin-bottom:6px;
+  }
+  .work-icon{
+    width:40px;height:40px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:auto;
+  }
+  .work-card p{color:var(--muted); font-size:0.9rem; margin-top:6px;}
+  .work-card .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--cyan);
+    text-transform:uppercase;
+    letter-spacing:0.1em;
+  }
+  @media(max-width:800px){
+    .work-grid{grid-template-columns:1fr;}
+  }
+
+  /* ---------- Contact / CTA ---------- */
+  .cta-section{
+    text-align:center;
+    padding:120px 0;
+  }
+  .cta-section h2{
+    font-size:clamp(2rem, 4vw, 3rem);
+    margin-bottom:18px;
+  }
+  .cta-section p{
+    color:var(--muted);
+    max-width:460px;
+    margin:0 auto 36px;
+  }
+  .cta-section .btn-row{justify-content:center;}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:36px 0;
+  }
+  .footer-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+  }
+  .footer-brand{
+    display:flex;align-items:center;gap:10px;
+    color:var(--muted);
+    font-size:0.85rem;
+  }
+  .footer-brand img{height:22px;}
+  .footer-links{
+    display:flex;gap:20px;
+    font-size:0.85rem;
+    color:var(--muted);
+  }
+  .footer-links a:hover{color:var(--cyan);}
+
+  /* WhatsApp floating button (mobile-friendly persistent CTA) */
+  .float-wa{
+    position:fixed;
+    bottom:22px;
+    right:22px;
+    z-index:60;
+    width:56px;height:56px;
+    border-radius:50%;
+    background:#25D366;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 24px -6px rgba(0,0,0,0.5);
+  }
+  .float-wa svg{width:28px;height:28px;fill:#fff;}
+
+  @media(max-width:900px){
+    .hero{grid-template-columns:1fr; padding-top:60px;}
+    .about{grid-template-columns:1fr;}
+    section{padding:70px 0 60px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- Circuit rail: decorative signature element, echoes the logo's circuit trace -->
+<div class="rail" id="rail">
+  <div class="rail-dot"></div>
+</div>
+
+<header>
+  <nav>
+    <a href="#top" class="brand">
+      <img src="logo.png" alt="TONIE_TECH logo">
+      <span>TONIE_TECH</span>
+    </a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="nav-cta" href="https://wa.me/254762220299?text=Hi%2C%20I%27d%20like%20to%20book%20a%20consultation%20about%20Website%20Development" target="_blank" rel="noopener">
+      Book a Consultation
+    </a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero wrap" id="hero">
+    <div>
+      <p class="eyebrow">Web Developer · Nairobi, Kenya</p>
+      <h1>Innovate. Build. <span>Inspire.</span></h1>
+      <p class="lead">I'm Tonie — I design and build websites for people who don't want to blend in. If you're ready to turn an idea into something real, let's build it.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="https://wa.me/254762220299?text=Hi%2C%20I%27d%20like%20to%20book%20a%20consultation%20about%20Website%20Development" target="_blank" rel="noopener">
+          Book a Consultation
+        </a>
+        <a class="btn btn-ghost" href="#work">See My Work</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-photo-frame">
+        <img src="tonie-photo.png" alt="Tonie, founder of TONIE_TECH">
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span></span><span></span><span></span>
+          <span class="terminal-label">build.js</span>
+        </div>
+        <div class="terminal-body" id="typewriter"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="about wrap" id="about">
+    <div>
+      <p class="eyebrow">Who's Building This</p>
+      <h2>Young, driven, and already delivering.</h2>
+    </div>
+    <div>
+      <p>I got into development because I wanted to build things that <strong>outlast trends</strong> — not just websites that look good on launch day, but ones that keep working, keep loading fast, and keep converting visitors into clients.</p>
+      <p>Every project is a chance to push further: cleaner code, sharper design, bigger results for the people I build for. I'm early in the journey, and I'm treating every website I ship as proof of where I'm headed.</p>
+      <div class="log">
+        <div class="log-line"><span class="arrow">&gt;</span> <span>Currently building websites for real clients, not just practice projects</span></div>
+        <div class="log-line"><span class="arrow">&gt;</span> <span class="muted">Based in Nairobi — working with clients anywhere</span></div>
+        <div class="log-line"><span class="arrow">&gt;</span> <span class="muted">Focused on speed, clean design, and code that holds up</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SERVICES ============ -->
+  <section class="wrap" id="services">
+    <div class="section-head">
+      <p class="eyebrow">What I Do</p>
+      <h2>Website Development</h2>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16v11H4z" stroke="#04060B" stroke-width="1.8"/><path d="M2 19h20" stroke="#04060B" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div class="service-text">
+        <h3>Custom websites, built from scratch</h3>
+        <p>No recycled templates. Every site is designed and coded around your brand, your content, and what you actually need it to do.</p>
+        <ul class="checklist">
+          <li>Custom design — not a template</li>
+          <li>Mobile-first, responsive on every screen</li>
+          <li>Fast load times & clean, maintainable code</li>
+          <li>Support after launch, not just a handoff</li>
+        </ul>
+      </div>
+      <div class="service-cta">
+        <a class="btn btn-primary" href="https://wa.me/254762220299?text=Hi%2C%20I%27d%20like%20to%20book%20a%20consultation%20about%20Website%20Development" target="_blank" rel="noopener">
+          Get Started
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WORK ============ -->
+  <!-- Placeholder gallery — swap each .work-card with an <img> of your project screenshot when ready -->
+  <section class="wrap" id="work">
+    <div class="section-head">
+      <p class="eyebrow">Projects</p>
+      <h2>Selected Work</h2>
+    </div>
+    <div class="work-grid">
+      <div class="work-card">
+        <div class="work-thumb">
+          <img src="project-schoolhub.png" alt="SchoolHub sign-in screen — a school management dashboard login">
+        </div>
+        <div class="work-info">
+          <span class="tag">Web App</span>
+          <h4>SchoolHub</h4>
+          <p>A school management dashboard — accounts, sign-in, and admin tools built for daily use.</p>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-thumb">
+          <img src="project-elitehotels.png" alt="EliteHotels homepage — hotel and restaurant booking site">
+        </div>
+        <div class="work-info">
+          <span class="tag">Booking Site</span>
+          <h4>EliteHotels</h4>
+          <p>A hotel & restaurant site with room bookings and food ordering in one place.</p>
+        </div>
+      </div>
+      <div class="work-card">
+        <div class="work-thumb">
+          <img src="project-aicmaamani.png" alt="AIC Maamani church website homepage">
+        </div>
+        <div class="work-info">
+          <span class="tag">Community Site</span>
+          <h4>AIC Maamani</h4>
+          <p>A church website with sermons, events, and a warm, editorial-style homepage.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT / FINAL CTA ============ -->
+  <section class="cta-section wrap" id="contact">
+    <p class="eyebrow" style="justify-content:center;">Let's Talk</p>
+    <h2>Got a website in mind? Let's build it.</h2>
+    <p>Message me directly on WhatsApp — tell me what you're building, and I'll reply personally.</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="https://wa.me/254762220299?text=Hi%2C%20I%27d%20like%20to%20book%20a%20consultation%20about%20Website%20Development" target="_blank" rel="noopener">
+        Book a Consultation on WhatsApp
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap footer-row">
+    <div class="footer-brand">
+      <img src="logo.png" alt="TONIE_TECH logo">
+      <span>© 2026 TONIE_TECH — Innovate. Build. Inspire.</span>
+    </div>
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#work">Work</a>
+      <a href="https://web.facebook.com/profile.php?id=61589680330388" target="_blank" rel="noopener">Facebook</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Persistent WhatsApp button -->
+<a class="float-wa" href="https://wa.me/254762220299?text=Hi%2C%20I%27d%20like%20to%20book%20a%20consultation%20about%20Website%20Development" target="_blank" rel="noopener" aria-label="Message on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.149-.15.35-.394.526-.59.176-.198.234-.339.35-.566.116-.226.116-.42-.036-.585-.152-.164-.68-1.617-.93-2.217-.25-.6-.51-.518-.7-.518-.19 0-.5.083-.766.083-.267 0-.7.05-1.067.516-.367.466-1.4 1.367-1.4 3.334 0 1.966 1.65 3.867 1.883 4.133.233.267 3.267 5.017 8 6.833 4.734 1.816 4.734 1.216 5.583 1.133.85-.083 2.734-1.117 3.117-2.2.383-1.083.383-2.017.267-2.2-.117-.183-.417-.284-.87-.517zM12.007 22h-.005a9.87 9.87 0 0 1-5.031-1.378L3.5 21.5l.938-3.408A9.94 9.94 0 0 1 2 12.005C2.001 6.486 6.487 2 12.007 2c2.657 0 5.155 1.036 7.03 2.912A9.914 9.914 0 0 1 22 12.02c-.003 5.517-4.49 9.98-9.993 9.98z"/></svg>
+</a>
+
+<script>
+  // Circuit rail: place nodes at each section, activate the closest one on scroll
+  const rail = document.getElementById('rail');
+  const sections = ['hero','about','services','work','contact'];
+  sections.forEach(id => {
+    const node = document.createElement('div');
+    node.className = 'node';
+    node.dataset.for = id;
+    rail.appendChild(node);
+  });
+
+  function positionNodes(){
+    const railHeight = document.body.scrollHeight;
+    rail.querySelectorAll('.node').forEach(node => {
+      const target = document.getElementById(node.dataset.for);
+      if(target){
+        const top = target.getBoundingClientRect().top + window.scrollY + 20;
+        node.style.top = top + 'px';
+      }
+    });
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const node = rail.querySelector('.node[data-for="' + entry.target.id + '"]');
+      if(node){
+        node.classList.toggle('active', entry.isIntersecting);
+      }
+    });
+  }, { threshold: 0.4 });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if(el) observer.observe(el);
+  });
+
+  window.addEventListener('load', positionNodes);
+  window.addEventListener('resize', positionNodes);
+
+  // Typewriter effect in the hero terminal card
+  const tw = document.getElementById('typewriter');
+  const lines = [
+    { pre: '', text: 'const brand = {', cls: '' },
+    { pre: '  ', text: 'name: ', cls: 'k', text2: '"TONIE_TECH"', cls2: 's' },
+    { pre: '  ', text: 'focus: ', cls: 'k', text2: '"Website Development"', cls2: 's' },
+    { pre: '  ', text: 'approach: ', cls: 'k', text2: '"custom, not templated"', cls2: 's' },
+    { pre: '  ', text: 'status: ', cls: 'k', text2: '"shipping"', cls2: 's' },
+    { pre: '', text: '};', cls: '' },
+    { pre: '', text: '', cls: '' },
+    { pre: '', text: '// let\'s build yours', cls: 'c' }
+  ];
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function typeLines(){
+    tw.innerHTML = '';
+    if(prefersReduced){
+      lines.forEach(l => {
+        const div = document.createElement('div');
+        div.innerHTML = (l.text2 ? `<span class="${l.cls}">${l.text}</span><span class="${l.cls2}">${l.text2}</span>` : `<span class="${l.cls}">${l.text}</span>`);
+        tw.appendChild(div);
+      });
+      return;
+    }
+    let li = 0;
+    function nextLine(){
+      if(li >= lines.length){
+        const cursorEl = document.createElement('span');
+        cursorEl.className = 'cursor';
+        tw.appendChild(cursorEl);
+        return;
+      }
+      const l = lines[li];
+      const div = document.createElement('div');
+      tw.appendChild(div);
+      const full = l.text2 ? l.text + l.text2 : l.text;
+      let ci = 0;
+      function typeChar(){
+        if(ci <= l.text.length){
+          div.innerHTML = `<span class="${l.cls}">${l.text.slice(0, ci)}</span>`;
+        } else if(l.text2 && ci <= full.length){
+          div.innerHTML = `<span class="${l.cls}">${l.text}</span><span class="${l.cls2}">${l.text2.slice(0, ci - l.text.length)}</span>`;
+        }
+        ci++;
+        if(ci <= full.length){
+          setTimeout(typeChar, 18);
+        } else {
+          li++;
+          setTimeout(nextLine, 120);
+        }
+      }
+      typeChar();
+    }
+    nextLine();
+  }
+  typeLines();
+</script>
+
+</body>
+</html>
